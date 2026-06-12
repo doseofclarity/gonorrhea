@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Gonorrhea – Comprehensive PHN Review</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <style>
+        .transition-all { transition: all 0.3s ease; }
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .group:hover .group-hover\:rotate-y-180 { transform: rotateY(180deg); }
+
+        .recall-mode .reveal-text {
+            background-color: #cbd5e1;
+            color: transparent;
+            border-radius: 0.375rem;
+            padding: 0 0.25rem;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            box-shadow: inset 0 0 0 1px #94a3b8;
+        }
+        .recall-mode .reveal-text:hover,
+        .recall-mode .reveal-text.revealed {
+            background-color: #fde047;
+            color: #1e293b;
+            box-shadow: none;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #0d9488; border-radius: 8px; }
+        .content-section { animation: fade 0.3s ease; }
+        @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .locked-section { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+        .quiz-feedback-correct { background-color: #dcfce7; border-left: 4px solid #22c55e; }
+        .quiz-feedback-wrong { background-color: #fee2e2; border-left: 4px solid #ef4444; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: { extend: { colors: { gon: { light: '#ccfbf1', DEFAULT: '#0d9488', dark: '#0f5e53' } } } }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 h-screen flex flex-col md:flex-row font-sans text-slate-800 overflow-hidden">
+
+    <!-- Mobile Header with burger on LEFT -->
+    <div class="md:hidden bg-gon-dark text-white p-4 flex justify-between items-center shadow-md z-30 shrink-0">
+        <button onclick="toggleMobileMenu()" class="text-white focus:outline-none z-40">
+            <i class="fa-solid fa-bars text-2xl"></i>
+        </button>
+        <h1 class="font-bold text-lg absolute left-1/2 transform -translate-x-1/2 pointer-events-none">
+            <i class="fa-solid fa-disease mr-2 text-gon-light"></i> Gonorrhea
+        </h1>
+        <div class="w-8"></div>
+    </div>
+
+    <nav id="sidebar" class="hidden md:flex flex-col w-full md:w-80 bg-white shadow-2xl h-full absolute md:relative z-30 transition-transform duration-300 shrink-0 border-r border-slate-200">
+        <div class="p-6 bg-gradient-to-br from-gon-dark to-gon text-white hidden md:block shrink-0">
+            <h1 class="font-black text-2xl tracking-wide"><i class="fa-solid fa-disease text-gon-light mr-2"></i> Gonorrhea</h1>
+            <p class="text-sm text-teal-100 mt-1 font-medium">Sexually Transmitted Infection · PHN Review</p>
+        </div>
+        <div class="flex-1 overflow-y-auto py-4">
+            <ul class="space-y-1 text-sm font-medium">
+                <li><button onclick="showSection('home')" id="btn-home" class="nav-btn w-full text-left px-6 py-3 bg-gon-light text-gon-dark border-r-4 border-gon-dark transition-colors"><i class="fa-solid fa-house w-6 nav-icon"></i><i class="fa-solid fa-lock w-6 hidden text-slate-400"></i> Home / Start</button></li>
+                <li><button onclick="showSection('overview')" id="btn-overview" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors locked-section"><i class="fa-solid fa-globe w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6 text-slate-400"></i> Epidemiology & Overview</button></li>
+                <li><button onclick="showSection('clinical')" id="btn-clinical" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors locked-section"><i class="fa-solid fa-stethoscope w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6 text-slate-400"></i> Clinical Features & Diagnosis</button></li>
+                <li><button onclick="showSection('transmission')" id="btn-transmission" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors locked-section"><i class="fa-solid fa-hand-holding-medical w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6 text-slate-400"></i> Transmission & Risk Factors</button></li>
+                <li><button onclick="showSection('prevention')" id="btn-prevention" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors locked-section"><i class="fa-solid fa-syringe w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6 text-slate-400"></i> Prevention & Screening</button></li>
+                <li><button onclick="showSection('treatment')" id="btn-treatment" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors locked-section"><i class="fa-solid fa-capsules w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6 text-slate-400"></i> Treatment & Complications</button></li>
+                <li><button onclick="showSection('phn')" id="btn-phn" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors locked-section"><i class="fa-solid fa-user-nurse w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6 text-slate-400"></i> PHN Role & Nursing Care</button></li>
+                <li><button onclick="showSection('mnemonics')" id="btn-mnemonics" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors border-t border-slate-200 mt-2 locked-section"><i class="fa-solid fa-brain w-6 text-gon nav-icon hidden"></i><i class="fa-solid fa-lock w-6 text-slate-400"></i> Mnemonic Appendix</button></li>
+                <li><button onclick="showSection('final_quiz_sec')" id="btn-final_quiz_sec" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors locked-section"><i class="fa-solid fa-graduation-cap w-6 text-amber-500 nav-icon hidden"></i><i class="fa-solid fa-lock w-6 text-slate-400"></i> Final 50‑Item Exam</button></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="flex-1 h-full overflow-y-auto bg-slate-100 relative w-full">
+        <div class="fixed top-16 md:top-4 right-4 md:right-8 z-40 flex items-center bg-white/90 backdrop-blur px-4 py-3 rounded-full shadow-lg border border-slate-200 cursor-pointer hover:bg-slate-50 transition-colors" onclick="toggleRecallMode()">
+            <span class="mr-3 text-sm font-bold text-slate-700 hidden md:inline"><i class="fa-solid fa-brain text-gon mr-1"></i> Active Recall</span>
+            <span class="mr-3 text-sm font-bold text-slate-700 md:hidden"><i class="fa-solid fa-brain text-gon"></i></span>
+            <button id="recall-toggle" class="w-12 h-6 bg-slate-300 rounded-full relative transition-colors duration-300 focus:outline-none shadow-inner pointer-events-none">
+                <div id="recall-knob" class="w-5 h-5 bg-white rounded-full absolute top-0.5 left-0.5 transition-transform duration-300 shadow"></div>
+            </button>
+        </div>
+
+        <div class="p-4 md:p-8 max-w-6xl mx-auto pb-32">
+
+            <!-- HOME SECTION -->
+            <section id="home" class="content-section flex flex-col items-center justify-center min-h-[80vh] text-center block">
+                <div class="bg-gradient-to-br from-slate-800 to-gon-dark text-white rounded-3xl shadow-2xl p-10 md:p-16 w-full relative overflow-hidden">
+                    <div class="absolute top-0 right-0 -mt-10 -mr-10 text-white opacity-5 pointer-events-none"><i class="fa-solid fa-bacterium text-[20rem]"></i></div>
+                    <div class="relative z-10">
+                        <div class="bg-white/10 backdrop-blur-sm inline-block p-4 rounded-full text-gon-light mb-6 shadow-sm border border-white/20">
+                            <i class="fa-solid fa-disease text-5xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-teal-200 mb-2 uppercase tracking-widest">Sexually Transmitted Infection</h3>
+                        <h1 class="text-4xl md:text-6xl font-black text-white mb-6 leading-tight drop-shadow-md">Gonorrhea<br>("The Clap")</h1>
+                        <div class="bg-white/10 backdrop-blur inline-block px-6 py-3 rounded-full mb-10 border border-white/20">
+                            <p class="text-lg text-white font-medium">"Increasing antimicrobial resistance – treat with dual therapy."</p>
+                        </div>
+                        <button onclick="unlockFirstSection()" class="bg-teal-600 hover:bg-teal-500 text-white font-black py-4 px-10 rounded-full shadow-xl transition-transform hover:scale-105 text-lg flex items-center mx-auto focus:outline-none">
+                            Begin Lecture <i class="fa-solid fa-arrow-right ml-3"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 1: Epidemiology & Overview -->
+            <section id="overview" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                    <h2 class="text-3xl font-black text-slate-800 mb-6 border-b-2 border-gon pb-3"><i class="fa-solid fa-globe text-gon mr-4"></i> Epidemiology & Overview</h2>
+                    <div class="bg-teal-50 border-l-4 border-gon p-4 mb-6 rounded-r shadow-sm">
+                        <p><strong class="text-gon-dark">Gonorrhea</strong> – second most common bacterial STI caused by <span class="reveal-text font-bold">Neisseria gonorrhoeae</span> (Gram‑negative diplococcus).</p>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
+                            <h3 class="font-bold text-lg mb-3"><i class="fa-solid fa-chart-line text-gon mr-2"></i> Public Health Significance</h3>
+                            <ul class="list-disc pl-5 space-y-2 text-sm">
+                                <li>High incidence globally; increasing antimicrobial resistance (multidrug‑resistant gonorrhea).</li>
+                                <li>In the Philippines: reported cases from social hygiene clinics; underreporting due to asymptomatic infections and limited diagnostics.</li>
+                                <li>Peak incidence in <span class="reveal-text">sexually active adolescents and young adults (15-30 years)</span>.</li>
+                                <li>Major cause of PID, infertility, epididymitis, and neonatal ophthalmia.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
+                            <h3 class="font-bold text-lg mb-3"><i class="fa-solid fa-virus mr-2 text-gon"></i> Agent & Characteristics</h3>
+                            <p><strong>Etiologic agent:</strong> <em>Neisseria gonorrhoeae</em> – Gram‑negative, kidney‑bean shaped diplococcus, fastidious, requires enriched media (chocolate agar).</p>
+                            <p><strong>Virulence factors:</strong> Pili, outer membrane proteins, lipooligosaccharide (LOS), IgA protease.</p>
+                            <p><strong>Increasing resistance:</strong> To penicillins, tetracyclines, fluoroquinolones, and emerging resistance to cephalosporins.</p>
+                        </div>
+                    </div>
+                    <button onclick="openQuiz('overview')" class="mt-8 w-full bg-slate-800 text-white font-black py-4 rounded-xl shadow-md hover:bg-slate-900 transition-colors flex items-center justify-center text-lg"><i class="fa-solid fa-list-check mr-3 text-2xl text-gon"></i> Take Quiz to Unlock Next Section</button>
+                </div>
+            </section>
+
+            <!-- SECTION 2: Clinical Features & Diagnosis -->
+            <section id="clinical" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                    <h2 class="text-3xl font-black text-slate-800 mb-6 border-b-2 border-gon pb-3"><i class="fa-solid fa-stethoscope text-gon mr-4"></i> Clinical Features & Diagnosis</h2>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-red-50 p-5 rounded-xl border border-red-200">
+                            <h3 class="font-bold text-lg text-red-800 mb-2">Signs & Symptoms</h3>
+                            <ul class="list-disc pl-5 space-y-1 text-sm">
+                                <li><strong class="text-teal-700">Men (symptomatic ~90%):</strong> Urethritis – <span class="reveal-text">purulent urethral discharge</span> (thick, yellow‑green), dysuria, meatal erythema.</li>
+                                <li><strong class="text-teal-700">Women (often asymptomatic ~50-80%):</strong> Cervicitis – increased vaginal discharge, dysuria, intermenstrual bleeding, postcoital bleeding; may be silent.</li>
+                                <li><strong class="text-teal-700">Rectal infection:</strong> May cause proctitis (pruritus, discharge, bleeding) or asymptomatic.</li>
+                                <li><strong class="text-teal-700">Pharyngeal infection:</strong> Usually asymptomatic; may cause sore throat.</li>
+                                <li><strong class="text-teal-700">Neonatal:</strong> Ophthalmia neonatorum (purulent conjunctivitis) within 2‑5 days after birth.</li>
+                                <li><strong class="text-teal-700">Disseminated gonococcal infection (DGI):</strong> Fever, arthritis, tenosynovitis, skin pustules (rare).</li>
+                            </ul>
+                        </div>
+                        <div class="bg-blue-50 p-5 rounded-xl border border-blue-200">
+                            <h3 class="font-bold text-lg">Diagnosis</h3>
+                            <ul class="list-disc pl-5 space-y-1 text-sm">
+                                <li><strong>Gram stain:</strong> Intracellular Gram‑negative diplococci in urethral or endocervical smear (high sensitivity in symptomatic men).</li>
+                                <li><strong>Culture:</strong> Gold standard; allows antimicrobial susceptibility testing. Requires Thayer‑Martin or chocolate agar.</li>
+                                <li><strong>NAAT (Nucleic Acid Amplification Test):</strong> Highly sensitive; can detect from urine, vaginal, endocervical, rectal, pharyngeal swabs.</li>
+                                <li><strong>Recommended:</strong> NAAT for screening; culture for confirmed cases and resistance testing.</li>
+                                <li>Dual testing for chlamydia is recommended (co‑infection common).</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button onclick="openQuiz('clinical')" class="mt-8 w-full bg-slate-800 text-white font-black py-4 rounded-xl shadow-md hover:bg-slate-900 transition-colors flex items-center justify-center text-lg"><i class="fa-solid fa-list-check mr-3 text-2xl text-gon"></i> Take Quiz to Unlock Next Section</button>
+                </div>
+            </section>
+
+            <!-- SECTION 3: Transmission & Risk Factors -->
+            <section id="transmission" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                    <h2 class="text-3xl font-black text-slate-800 mb-6 border-b-2 border-gon pb-3"><i class="fa-solid fa-hand-holding-medical text-gon mr-4"></i> Transmission & Risk Factors</h2>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-red-50 p-5 rounded-xl border border-red-200">
+                            <h3 class="font-bold text-lg text-red-800 mb-2"><i class="fa-solid fa-people-arrows"></i> Mode of Transmission</h3>
+                            <ul class="list-disc pl-5 space-y-1 text-sm">
+                                <li>Sexual contact (vaginal, anal, oral) with an infected partner.</li>
+                                <li>Perinatal transmission – from infected mother to newborn during vaginal delivery (ophthalmia neonatorum).</li>
+                                <li>Autoinoculation (hand to eye) possible but rare.</li>
+                                <li>No transmission via fomites, toilet seats, or swimming pools.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-amber-50 p-5 rounded-xl border border-amber-200">
+                            <h3 class="font-bold text-lg">Risk Factors</h3>
+                            <ul class="list-disc pl-5 space-y-1 text-sm">
+                                <li>Age <25 years (especially adolescents)</li>
+                                <li>Multiple sexual partners</li>
+                                <li>Inconsistent condom use</li>
+                                <li>Previous or coexisting STI (especially chlamydia)</li>
+                                <li>Low socioeconomic status, lack of access to care</li>
+                                <li>Men who have sex with men (MSM) – higher risk for pharyngeal and rectal gonorrhea</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button onclick="openQuiz('transmission')" class="mt-8 w-full bg-slate-800 text-white font-black py-4 rounded-xl shadow-md hover:bg-slate-900 transition-colors flex items-center justify-center text-lg"><i class="fa-solid fa-list-check mr-3 text-2xl text-gon"></i> Take Quiz to Unlock Next Section</button>
+                </div>
+            </section>
+
+            <!-- SECTION 4: Prevention & Screening -->
+            <section id="prevention" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                    <h2 class="text-3xl font-black text-slate-800 mb-6 border-b-2 border-gon pb-3"><i class="fa-solid fa-syringe text-gon mr-4"></i> Prevention & Screening</h2>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-green-50 p-5 rounded-xl border border-green-200">
+                            <h3 class="font-bold text-lg"><i class="fa-solid fa-shield-heart"></i> Primary Prevention</h3>
+                            <ul class="list-disc pl-5 space-y-1 text-sm">
+                                <li>Consistent and correct use of <span class="reveal-text">condoms</span>.</li>
+                                <li>Mutual monogamy with uninfected partner.</li>
+                                <li>Reduction of number of sexual partners.</li>
+                                <li>Abstinence.</li>
+                                <li>Health education on STI transmission and prevention.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-blue-50 p-5 rounded-xl border border-blue-200">
+                            <h3 class="font-bold text-lg">Screening Recommendations</h3>
+                            <ul class="list-disc pl-5 space-y-1 text-sm">
+                                <li><strong>Sexually active women <25 years</strong> – annual gonorrhea screening.</li>
+                                <li>Women ≥25 years with risk factors.</li>
+                                <li><strong>Pregnant women</strong> – screen at first prenatal visit; repeat if high risk.</li>
+                                <li><strong>MSM</strong> – screen annually (urethral, rectal, pharyngeal).</li>
+                                <li>Patients with HIV, or those attending STI clinics.</li>
+                                <li>Partner notification and treatment.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button onclick="openQuiz('prevention')" class="mt-8 w-full bg-slate-800 text-white font-black py-4 rounded-xl shadow-md hover:bg-slate-900 transition-colors flex items-center justify-center text-lg"><i class="fa-solid fa-list-check mr-3 text-2xl text-gon"></i> Take Quiz to Unlock Next Section</button>
+                </div>
+            </section>
+
+            <!-- SECTION 5: Treatment & Complications -->
+            <section id="treatment" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                    <h2 class="text-3xl font-black text-slate-800 mb-6 border-b-2 border-gon pb-3"><i class="fa-solid fa-capsules text-gon mr-4"></i> Treatment & Complications</h2>
+                    <div class="bg-amber-50 p-5 rounded-xl border border-amber-200 mb-6">
+                        <h3 class="font-bold text-lg">Antibiotic Therapy (DOH & CDC 2025 Guidelines)</h3>
+                        <ul class="list-disc pl-5 space-y-1 text-sm">
+                            <li><strong class="text-teal-700">Dual therapy (still recommended despite emerging resistance):</strong> Ceftriaxone 500mg IM single dose + Azithromycin 1g orally single dose.</li>
+                            <li>Alternative for cephalosporin allergy: <span class="reveal-text">Gentamicin 240mg IM + Azithromycin 2g orally</span> (or cefixime if mild).</li>
+                            <li><strong>Partner management:</strong> Treat all sexual partners within 60 days.</li>
+                            <li><strong>Test of cure:</strong> Not routinely recommended for uncomplicated urogenital gonorrhea unless symptoms persist. However, pharyngeal infections should have test of cure 7-14 days after treatment.</li>
+                            <li><strong>Resistance surveillance:</strong> Critical – doxycycline and fluoroquinolones no longer recommended.</li>
+                            <li>Pregnant women: Ceftriaxone + azithromycin; avoid quinolones.</li>
+                            <li>Neonatal ophthalmia: Ceftriaxone 25-50mg/kg IV/IM single dose.</li>
+                        </ul>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-slate-50 p-4 rounded-xl">
+                            <h3 class="font-bold">Complications (if untreated)</h3>
+                            <ul class="list-disc pl-5 text-sm">
+                                <li><strong>Women:</strong> Pelvic inflammatory disease (PID) → infertility, ectopic pregnancy, chronic pelvic pain.</li>
+                                <li><strong>Men:</strong> Epididymitis → infertility (rare), prostatitis.</li>
+                                <li><strong>Neonatal:</strong> Ophthalmia neonatorum (blindness if untreated).</li>
+                                <li><strong>Disseminated gonococcal infection (DGI):</strong> Arthritis, tenosynovitis, dermatitis, endocarditis, meningitis.</li>
+                                <li>Pharyngeal and rectal infections may persist and cause local complications.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-gon-light p-4 rounded-xl">
+                            <h3 class="font-bold">Prognosis & Antimicrobial Resistance</h3>
+                            <ul class="list-disc pl-5 text-sm">
+                                <li>Excellent cure rate with appropriate dual therapy (>95%).</li>
+                                <li>Multidrug‑resistant (MDR) and extensively drug‑resistant (XDR) strains emerging globally.</li>
+                                <li>Treatment failure (especially ceftriaxone) reported in some regions.</li>
+                                <li>Culture and antimicrobial susceptibility testing essential for treatment failures.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button onclick="openQuiz('treatment')" class="mt-8 w-full bg-slate-800 text-white font-black py-4 rounded-xl shadow-md hover:bg-slate-900 transition-colors flex items-center justify-center text-lg"><i class="fa-solid fa-list-check mr-3 text-2xl text-gon"></i> Take Quiz to Unlock Next Section</button>
+                </div>
+            </section>
+
+            <!-- SECTION 6: PHN Role & Nursing Care -->
+            <section id="phn" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                    <h2 class="text-3xl font-black text-slate-800 mb-6 border-b-2 border-gon pb-3"><i class="fa-solid fa-user-nurse text-gon mr-4"></i> PHN Role & Nursing Care</h2>
+                    <ul class="list-disc pl-5 space-y-3 text-slate-700">
+                        <li><strong>Health education:</strong> Promote condom use, partner reduction, STI awareness.</li>
+                        <li><strong>Screening promotion:</strong> Encourage annual screening for at‑risk populations (young women, MSM).</li>
+                        <li><strong>Partner notification & management:</strong> Assist in notifying sexual partners (last 60 days) and ensure treatment.</li>
+                        <li><strong>Expedited partner therapy (EPT):</strong> Provide prescriptions or medications to patients for their partners without prior examination (where permitted).</li>
+                        <li><strong>Prenatal care:</strong> Screen pregnant women; treat to prevent neonatal ophthalmia.</li>
+                        <li><strong>Treatment support:</strong> Counsel on medication adherence, need for IM ceftriaxone, and abstinence during treatment (7 days after single‑dose).</li>
+                        <li><strong>Prevention of reinfection:</strong> Emphasize retesting 3 months after treatment (high reinfection rate).</li>
+                        <li><strong>Antimicrobial resistance awareness:</strong> Educate on importance of completing treatment and not sharing antibiotics.</li>
+                        <li><strong>Reporting:</strong> Gonorrhea is a notifiable disease; report confirmed cases to local epidemiology unit.</li>
+                    </ul>
+                    <div class="bg-indigo-50 mt-6 p-4 rounded-xl border border-indigo-200">
+                        <p class="font-bold"><i class="fa-regular fa-hospital"></i> Related DOH Programs:</p>
+                        <p>National STI/HIV Prevention and Control Program · Social Hygiene Clinics · Antimicrobial Resistance Surveillance Program</p>
+                    </div>
+                    <button onclick="openQuiz('phn')" class="mt-8 w-full bg-slate-800 text-white font-black py-4 rounded-xl shadow-md hover:bg-slate-900 transition-colors flex items-center justify-center text-lg"><i class="fa-solid fa-list-check mr-3 text-2xl text-gon"></i> Take Quiz to Unlock Next Section</button>
+                </div>
+            </section>
+
+            <!-- SECTION 7: Mnemonic Appendix -->
+            <section id="mnemonics" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                    <h2 class="text-3xl font-black text-slate-800 mb-6 border-b-2 border-gon pb-3"><i class="fa-solid fa-brain text-gon mr-4"></i> Mnemonic Appendix</h2>
+                    <div class="overflow-x-auto rounded-xl border border-slate-200 shadow-sm">
+                        <table class="w-full text-left text-sm md:text-base">
+                            <thead class="bg-slate-800 text-white"><tr><th class="p-3">Topic</th><th class="p-3">Mnemonic</th><th class="p-3">Meaning</th></tr></thead>
+                            <tbody class="divide-y bg-white">
+                                <tr><td class="p-3 font-semibold">Typical discharge in men</td><td class="font-black text-gon">Purulent (thick, yellow-green)</td><td class="reveal-text">Urethral exudate – "the clap"</td></tr>
+                                <tr class="bg-slate-50"><td class="p-3 font-semibold">First-line treatment (dual)</td><td class="font-black text-gon">C + A (Ceftriaxone + Azithromycin)</td><td class="reveal-text">Ceftriaxone IM + Azithromycin orally single dose</td></tr>
+                                <tr><td class="p-3 font-semibold">Neonatal eye prophylaxis</td><td class="font-black text-gon">Ophthalmia neonatorum (within 2-5 days)</td><td class="reveal-text">Prevent blindness – treat with ceftriaxone, not silver nitrate</td></tr>
+                                <tr class="bg-slate-50"><td class="p-3 font-semibold">Complications in women</td><td class="font-black text-gon">P.I.E. (PID, Infertility, Ectopic)</td><td class="reveal-text">Pelvic inflammatory disease → infertility, ectopic pregnancy</td></tr>
+                                <tr><td class="p-3 font-semibold">Disseminated gonococcal infection (DGI)</td><td class="font-black text-gon">F.A.T. (Fever, Arthritis, Tenosynovitis) + rash</td><td class="reveal-text">Fever, arthralgia/arthritis, tenosynovitis, pustular skin lesions</td></tr>
+                                <tr class="bg-slate-50"><td class="p-3 font-semibold">Screening target</td><td class="font-black text-gon">Women <25 years</td><td class="reveal-text">Annual screening for all sexually active women under 25</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button onclick="openQuiz('final_quiz')" class="mt-8 w-full bg-amber-500 text-slate-900 font-black py-4 rounded-xl shadow-md hover:bg-amber-400 transition-colors text-lg"><i class="fa-solid fa-graduation-cap mr-3"></i> Take Final 50‑Item Exam</button>
+                </div>
+            </section>
+
+            <!-- FINAL QUIZ SECTION -->
+            <section id="final_quiz_sec" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8 text-center min-h-[60vh] flex flex-col justify-center items-center">
+                    <i class="fa-solid fa-graduation-cap text-8xl text-amber-400 mb-6"></i>
+                    <h2 class="text-4xl font-black text-slate-800 mb-4">Final Comprehensive Exam</h2>
+                    <p class="text-lg text-slate-600 mb-8 max-w-2xl">You have completed all modules. Test your mastery of Gonorrhea – 50 items, need 75% to pass.</p>
+                    <button onclick="openQuiz('final_quiz')" class="w-full max-w-md bg-slate-800 text-white font-black py-4 rounded-xl shadow-md hover:bg-slate-900 transition-colors text-xl">Start Final Exam</button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <div id="quiz-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-900/80 backdrop-blur-sm p-4">
+        <div class="bg-white w-full max-w-3xl rounded-2xl shadow-2xl p-6 md:p-8 relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeQuiz()" class="absolute top-4 right-4 text-slate-400 hover:text-red-500"><i class="fa-solid fa-xmark text-2xl"></i></button>
+            <h2 id="quiz-title" class="text-3xl font-black text-slate-800 mb-2"></h2>
+            <p class="text-slate-600 mb-6 font-medium border-b border-slate-200 pb-4">Score at least <span class="font-bold text-gon">75%</span> to unlock next section.</p>
+            <div id="quiz-questions-container" class="space-y-4"></div>
+            <button id="quiz-submit-btn" onclick="submitQuiz()" class="mt-8 w-full bg-gon text-white font-bold py-4 rounded-xl hover:bg-gon-dark transition-colors shadow-lg text-lg">Submit Answers</button>
+            <div id="quiz-result-container" class="hidden mt-6 p-4 rounded-xl bg-slate-100 border border-slate-200"></div>
+        </div>
+    </div>
+
+    <script>
+        let unlockedSections = ['home'];
+        const quizzes = {
+            overview: { title: 'Epidemiology & Overview', next: 'clinical', questions: [
+                { q: "What is the causative agent of gonorrhea?", options: ["Neisseria meningitidis", "Neisseria gonorrhoeae", "Chlamydia trachomatis", "Treponema pallidum"], ans: 1 },
+                { q: "Gonorrhea is the _____ most common bacterial STI worldwide.", options: ["First", "Second", "Third", "Fourth"], ans: 1 },
+                { q: "Which age group has the highest incidence of gonorrhea?", options: ["Children <12", "Adolescents and young adults (15-30 years)", "Adults 40-60 years", "Elderly"], ans: 1 },
+                { q: "The bacterium Neisseria gonorrhoeae appears under Gram stain as:", options: ["Gram-positive cocci in chains", "Gram-negative diplococci (kidney-bean shaped)", "Gram-negative rods", "Gram-positive cocci in clusters"], ans: 1 },
+                { q: "Which of the following is a major public health concern regarding gonorrhea?", options: ["Vaccine availability", "Antimicrobial resistance (multidrug-resistant strains)", "High mortality rate", "Airborne transmission"], ans: 1 },
+                { q: "Gonorrhea is increasing in the Philippines due to:", options: ["Improved hygiene", "Underreporting and asymptomatic infections", "Effective vaccination", "Decreased sexual activity"], ans: 1 },
+                { q: "The preferred growth medium for Neisseria gonorrhoeae is:", options: ["MacConkey agar", "Chocolate agar (Thayer-Martin)", "Blood agar", "Sabouraud agar"], ans: 1 },
+                { q: "Which of the following is NOT a virulence factor of N. gonorrhoeae?", options: ["Pili", "IgA protease", "Lipooligosaccharide (LOS)", "Exotoxin A"], ans: 3 },
+                { q: "Gonorrhea is associated with which other STI due to frequent co-infection?", options: ["Syphilis", "Chlamydia", "HIV", "HPV"], ans: 1 },
+                { q: "The case fatality rate of uncomplicated gonorrhea is:", options: ["High (>10%)", "Moderate (5-10%)", "Low (<0.1%)", "Zero"], ans: 2 }
+            ] },
+            clinical: { title: 'Clinical Features & Diagnosis', next: 'transmission', questions: [
+                { q: "In men, the classic symptom of gonococcal urethritis is:", options: ["Clear, mucoid discharge", "Purulent (thick, yellow-green) urethral discharge and dysuria", "Genital ulcers", "Painless hematuria"], ans: 1 },
+                { q: "Approximately what percentage of women with gonococcal cervicitis are asymptomatic?", options: ["10-20%", "30-40%", "50-80%", "90-95%"], ans: 2 },
+                { q: "Neonatal gonococcal ophthalmia typically presents within:", options: ["12 hours", "2-5 days after birth", "2 weeks", "1 month"], ans: 1 },
+                { q: "The gold standard for diagnosing gonorrhea (with susceptibility testing) is:", options: ["NAAT", "Gram stain", "Culture", "Serology"], ans: 2 },
+                { q: "The triad of disseminated gonococcal infection (DGI) includes:", options: ["Fever, rash, meningitis", "Fever, arthritis/tenosynovitis, pustular skin lesions", "Cough, hemoptysis, chest pain", "Dysuria, hematuria, suprapubic pain"], ans: 1 },
+                { q: "Which diagnostic test is highly sensitive and can detect gonorrhea from urine samples?", options: ["Culture", "Gram stain", "NAAT (Nucleic Acid Amplification Test)", "Darkfield microscopy"], ans: 2 },
+                { q: "A patient with pharyngeal gonorrhea is most likely to:", options: ["Have severe sore throat", "Be asymptomatic", "Develop pneumonia", "Have cervical lymphadenopathy"], ans: 1 },
+                { q: "In men, the Gram stain of urethral discharge shows:", options: ["Gram-positive cocci", "Intracellular Gram-negative diplococci", "Gram-negative rods", "Yeast cells"], ans: 1 },
+                { q: "Which of the following is a complication of untreated gonorrhea in women?", options: ["Cervical cancer", "Pelvic inflammatory disease (PID)", "Ovarian cysts", "Endometriosis"], ans: 1 },
+                { q: "Disseminated gonococcal infection may cause all EXCEPT:", options: ["Meningitis", "Endocarditis", "Hepatitis", "Septic arthritis"], ans: 2 }
+            ] },
+            transmission: { title: 'Transmission & Risk Factors', next: 'prevention', questions: [
+                { q: "Gonorrhea is primarily transmitted through:", options: ["Respiratory droplets", "Sexual contact (vaginal, anal, oral)", "Casual contact", "Blood transfusion"], ans: 1 },
+                { q: "Perinatal transmission of gonorrhea can cause:", options: ["Congenital syphilis", "Ophthalmia neonatorum (neonatal conjunctivitis)", "Neonatal herpes", "Jaundice"], ans: 1 },
+                { q: "Which of the following is a risk factor for gonorrhea?", options: ["Age >40 years", "Consistent condom use", "Multiple sexual partners", "Monogamous relationship"], ans: 2 },
+                { q: "Men who have sex with men (MSM) are at higher risk for:", options: ["Pharyngeal and rectal gonorrhea", "Only urethral gonorrhea", "Neonatal infection", "None"], ans: 0 },
+                { q: "The incubation period for gonorrhea is typically:", options: ["1-3 days", "1-14 days (usually 2-7 days)", "3-6 weeks", "2-3 months"], ans: 1 },
+                { q: "Which of the following does NOT transmit gonorrhea?", options: ["Vaginal intercourse", "Oral sex", "Sharing towels", "Anal intercourse"], ans: 2 },
+                { q: "A pregnant woman with untreated gonorrhea may transmit the infection to her baby:", options: ["Through the placenta", "During vaginal delivery", "Through breast milk", "By coughing"], ans: 1 },
+                { q: "The most common co-infection with gonorrhea is:", options: ["HIV", "Syphilis", "Chlamydia", "HPV"], ans: 2 },
+                { q: "Which sexual practice has the highest risk of pharyngeal gonorrhea?", options: ["Vaginal intercourse", "Fellatio (oral-penile contact)", "Cunnilingus", "Anal intercourse"], ans: 1 },
+                { q: "Which group has the highest reported rates of gonorrhea in the Philippines?", options: ["Elderly", "Sexually active adolescents and young adults", "Children", "Pregnant women"], ans: 1 }
+            ] },
+            prevention: { title: 'Prevention & Screening', next: 'treatment', questions: [
+                { q: "The most effective way to prevent gonorrhea is:", options: ["Vaccination", "Consistent condom use and limiting sexual partners", "Daily antibiotics", "Douching"], ans: 1 },
+                { q: "Annual gonorrhea screening is recommended for:", options: ["All sexually active women <25 years", "All men >50 years", "Only sex workers", "All pregnant women"], ans: 0 },
+                { q: "Expedited partner therapy (EPT) for gonorrhea involves:", options: ["Reporting partners to police", "Giving medications to the patient for their partners without prior examination", "Partner quarantine", "Only treating the patient"], ans: 1 },
+                { q: "Which of the following is a barrier to gonorrhea prevention?", options: ["Asymptomatic infections", "Stigma", "Limited access to screening", "All of the above"], ans: 3 },
+                { q: "Pregnant women should be screened for gonorrhea:", options: ["Only if symptomatic", "At first prenatal visit; repeat in third trimester if high risk", "Only at delivery", "Not recommended"], ans: 1 },
+                { q: "The recommended screening method for asymptomatic individuals is:", options: ["Culture", "Gram stain", "NAAT", "Serology"], ans: 2 },
+                { q: "Partner treatment is important to prevent:", options: ["Reinfection", "Vaccine failure", "Antibiotic resistance", "Mutation"], ans: 0 },
+                { q: "Patients treated for gonorrhea should be retested after how many months due to high reinfection rate?", options: ["1 month", "3 months", "6 months", "1 year"], ans: 1 },
+                { q: "Which of the following increases condom effectiveness?", options: ["Using oil-based lubricants", "Consistent and correct use every act", "Reusing condoms", "Doubling condoms"], ans: 1 },
+                { q: "MSM should be screened for gonorrhea at which anatomic sites?", options: ["Urethra only", "Rectum only", "Pharynx only", "All exposed sites (urethral, rectal, pharyngeal)"], ans: 3 }
+            ] },
+            treatment: { title: 'Treatment & Complications', next: 'phn', questions: [
+                { q: "First-line dual therapy for gonorrhea is:", options: ["Ceftriaxone 500mg IM + Azithromycin 1g orally", "Ciprofloxacin 500mg orally", "Doxycycline 100mg BID x7d", "Penicillin G"], ans: 0 },
+                { q: "Why is dual therapy recommended?", options: ["To treat both gonorrhea and chlamydia (common co-infection) and to delay resistance", "To reduce side effects", "To lower cost", "To avoid IM injections"], ans: 0 },
+                { q: "Which antibiotic is no longer recommended for gonorrhea due to high resistance?", options: ["Ceftriaxone", "Ciprofloxacin (fluoroquinolones)", "Azithromycin", "Gentamicin"], ans: 1 },
+                { q: "Neonatal gonococcal ophthalmia is treated with:", options: ["Topical erythromycin", "Ceftriaxone IV/IM single dose", "Oral azithromycin", "Silver nitrate drops"], ans: 1 },
+                { q: "A complication of untreated gonorrhea in women that can cause infertility is:", options: ["Bacterial vaginosis", "Pelvic inflammatory disease (PID)", "Cervical ectopy", "Endometritis"], ans: 1 },
+                { q: "Disseminated gonococcal infection (DGI) requires:", options: ["Oral azithromycin alone", "Hospitalization and IV ceftriaxone for 7-14 days", "No treatment", "Topical antibiotics"], ans: 1 },
+                { q: "Why is test of cure recommended for pharyngeal gonorrhea?", options: ["Pharyngeal infections are harder to cure", "Higher failure rates", "To detect resistance", "All of the above"], ans: 3 },
+                { q: "A patient allergic to cephalosporins may be treated with:", options: ["Penicillin", "Doxycycline alone", "Gentamicin + Azithromycin", "Ciprofloxacin"], ans: 2 },
+                { q: "The emergence of multidrug-resistant gonorrhea is concerning because:", options: ["There are few remaining treatment options", "It is now untreatable", "Vaccines are ineffective", "Mortality is high"], ans: 0 },
+                { q: "Which of the following is NOT a complication of gonorrhea?", options: ["Epididymitis", "Pelvic inflammatory disease", "Cervical cancer", "Ophthalmia neonatorum"], ans: 2 }
+            ] },
+            phn: { title: 'PHN Role & Nursing Care', next: 'mnemonics', questions: [
+                { q: "A sexually active 20-year-old woman comes for a check-up. The PHN should:", options: ["Ask about sexual history and offer gonorrhea/chlamydia screening", "Assume she is low risk", "Only screen if she has symptoms", "Refer to a gynecologist first"], ans: 0 },
+                { q: "Partner notification for gonorrhea should be done for partners within the last:", options: ["7 days", "60 days", "90 days", "1 year"], ans: 1 },
+                { q: "Expedited partner therapy (EPT) is allowed in the Philippines under:", options: ["Not allowed", "DOH STI program guidelines for selected cases", "Only for HIV", "Only for syphilis"], ans: 1 },
+                { q: "The PHN should counsel a patient with gonorrhea to:", options: ["Complete treatment, notify partners, abstain for 7 days after single dose, and retest in 3 months", "Ignore partners", "Stop antibiotics after symptoms disappear", "Take leftover antibiotics for future infections"], ans: 0 },
+                { q: "Gonorrhea is a notifiable disease. This means:", options: ["It must be reported to public health authorities", "It is not reportable", "Only severe cases are reported", "Only hospital cases are reported"], ans: 0 },
+                { q: "Which of the following is a key health education message for preventing gonorrhea?", options: ["Condoms are 100% effective", "You can get gonorrhea from a toilet seat", "Many people have no symptoms – get tested regularly", "Only promiscuous people get gonorrhea"], ans: 2 },
+                { q: "A pregnant woman tests positive for gonorrhea. The PHN should ensure:", options: ["Treatment with doxycycline", "Treatment with ceftriaxone + azithromycin and partner treatment to prevent neonatal ophthalmia", "No treatment until after delivery", "C-section to prevent transmission"], ans: 1 },
+                { q: "To reduce reinfection, the PHN should advise:", options: ["Abstinence for 6 months", "Retesting 3 months after treatment", "Change sexual partners", "Douching after sex"], ans: 1 },
+                { q: "A patient with gonorrhea who has PID requires:", options: ["Outpatient oral antibiotics", "Hospitalization for IV antibiotics (depending on severity)", "No treatment", "Surgery"], ans: 1 },
+                { q: "The PHN should refer a patient with suspected disseminated gonococcal infection to:", options: ["Dermatologist", "Infectious disease specialist or hospital", "Pulmonologist", "Cardiologist"], ans: 1 }
+            ] }
+        };
+
+        // Build final quiz (50 items)
+        let finalQ = [];
+        for (let sec of ['overview','clinical','transmission','prevention','treatment','phn']) {
+            finalQ = finalQ.concat(quizzes[sec].questions.slice(0,7));
+        }
+        while(finalQ.length < 50) finalQ.push({ q: "What is the first-line dual therapy for uncomplicated gonorrhea?", options: ["Ceftriaxone + Doxycycline", "Ceftriaxone + Azithromycin", "Ciprofloxacin + Azithromycin", "Penicillin + Gentamicin"], ans: 1 });
+        quizzes['final_quiz'] = { title: 'Final 50‑Item Exam', next: null, questions: finalQ };
+
+        function unlockFirstSection() { if(!unlockedSections.includes('overview')) { unlockedSections.push('overview'); updateSidebarUI(); } showSection('overview'); }
+        function showSection(sectionId) {
+            if (!unlockedSections.includes(sectionId) && sectionId !== 'home') { alert("Please pass the Active Recall Quiz at the bottom of the previous section to unlock this content."); return; }
+            document.querySelectorAll('.content-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(sectionId)?.classList.remove('hidden');
+            document.querySelectorAll('.nav-btn').forEach(btn => { btn.classList.remove('bg-gon-light','text-gon-dark','border-r-4','border-gon-dark'); btn.classList.add('text-slate-600'); });
+            const activeBtn = document.getElementById('btn-'+sectionId);
+            if(activeBtn) { activeBtn.classList.remove('text-slate-600'); activeBtn.classList.add('bg-gon-light','text-gon-dark','border-r-4','border-gon-dark'); }
+            if(window.innerWidth < 768) document.getElementById('sidebar').classList.add('hidden');
+            document.querySelector('main').scrollTop = 0;
+        }
+        function updateSidebarUI() {
+            const sections = ['home','overview','clinical','transmission','prevention','treatment','phn','mnemonics','final_quiz_sec'];
+            sections.forEach(sec => {
+                const btn = document.getElementById('btn-'+sec);
+                if(!btn) return;
+                const lockIcon = btn.querySelector('.fa-lock'), mainIcon = btn.querySelector('.nav-icon');
+                if(unlockedSections.includes(sec) || sec==='home') { btn.classList.remove('locked-section'); if(lockIcon) lockIcon.classList.add('hidden'); if(mainIcon) mainIcon.classList.remove('hidden'); }
+                else { btn.classList.add('locked-section'); if(lockIcon) lockIcon.classList.remove('hidden'); if(mainIcon) mainIcon.classList.add('hidden'); }
+            });
+        }
+        let currentQuiz = null;
+        function openQuiz(sectionId) {
+            currentQuiz = sectionId;
+            const qd = quizzes[sectionId];
+            if(!qd) { console.error("Quiz not found:", sectionId); return; }
+            document.getElementById('quiz-title').innerText = qd.title;
+            const container = document.getElementById('quiz-questions-container');
+            container.innerHTML = '';
+            qd.questions.forEach((q, idx) => {
+                let html = `<div class="bg-slate-50 p-4 rounded-xl border mb-4" id="quiz-q-${idx}">
+                    <p class="font-bold mb-3">${idx+1}. ${q.q}</p>
+                    <div class="space-y-2" data-qidx="${idx}">`;
+                q.options.forEach((opt, oi) => {
+                    html += `<label class="flex items-center space-x-3 p-2 rounded-lg hover:bg-white cursor-pointer">
+                        <input type="radio" name="q${idx}" value="${oi}" class="form-radio text-gon">
+                        <span>${opt}</span>
+                    </label>`;
+                });
+                html += `</div><div class="feedback-${idx} text-sm mt-2 hidden"></div></div>`;
+                container.innerHTML += html;
+            });
+            document.getElementById('quiz-submit-btn').classList.remove('hidden');
+            document.getElementById('quiz-result-container').classList.add('hidden');
+            document.getElementById('quiz-modal').classList.remove('hidden');
+        }
+        function closeQuiz() { document.getElementById('quiz-modal').classList.add('hidden'); }
+        function submitQuiz() {
+            const qd = quizzes[currentQuiz];
+            if(!qd) return;
+            let score = 0;
+            for(let i=0; i<qd.questions.length; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                const isCorrect = (selected && parseInt(selected.value) === qd.questions[i].ans);
+                if(isCorrect) score++;
+                const feedbackDiv = document.querySelector(`.feedback-${i}`);
+                if(feedbackDiv) {
+                    feedbackDiv.classList.remove('hidden');
+                    const correctAnswerText = qd.questions[i].options[qd.questions[i].ans];
+                    if(isCorrect) {
+                        feedbackDiv.innerHTML = `<span class="text-green-700"><i class="fa-solid fa-check-circle mr-1"></i> Correct!</span>`;
+                        feedbackDiv.parentElement?.classList.add('quiz-feedback-correct');
+                        feedbackDiv.parentElement?.classList.remove('quiz-feedback-wrong');
+                    } else {
+                        const selectedText = selected ? qd.questions[i].options[parseInt(selected.value)] : "No answer";
+                        feedbackDiv.innerHTML = `<span class="text-red-700"><i class="fa-solid fa-times-circle mr-1"></i> Incorrect. Correct answer: <strong>${correctAnswerText}</strong>. Your answer: ${selectedText}.</span>`;
+                        feedbackDiv.parentElement?.classList.add('quiz-feedback-wrong');
+                        feedbackDiv.parentElement?.classList.remove('quiz-feedback-correct');
+                    }
+                }
+            }
+            const percent = (score/qd.questions.length)*100;
+            const resultDiv = document.getElementById('quiz-result-container');
+            const btn = document.getElementById('quiz-submit-btn');
+            btn.classList.add('hidden');
+            resultDiv.classList.remove('hidden');
+            if(percent >= 75) {
+                if(currentQuiz === 'final_quiz') {
+                    resultDiv.innerHTML = `<div class="text-amber-500 text-6xl mb-4 text-center">🏆</div><h3 class="text-2xl font-black text-center">Excellent!</h3><p class="text-center">Score ${score}/${qd.questions.length} (${percent}%)</p><p class="mt-2 text-center text-green-700">You mastered Gonorrhea!</p><button onclick="closeQuiz()" class="mt-4 w-full bg-slate-800 text-white py-2 rounded-lg">Close</button>`;
+                    return;
+                }
+                if(qd.next && !unlockedSections.includes(qd.next)) { unlockedSections.push(qd.next); if(qd.next === 'mnemonics') unlockedSections.push('final_quiz_sec'); updateSidebarUI(); }
+                resultDiv.innerHTML = `<div class="text-green-600 text-5xl mb-4 text-center">✓</div><h3 class="text-2xl font-black text-center">Passed!</h3><p class="text-center">Score ${score}/${qd.questions.length} (${percent}%)</p><button onclick="closeQuiz(); showSection('${qd.next}')" class="mt-4 w-full bg-green-600 text-white py-2 rounded-lg">Unlock Next Section</button>`;
+            } else {
+                resultDiv.innerHTML = `<div class="text-red-500 text-5xl mb-4 text-center">✗</div><h3 class="text-2xl font-black text-center">Failed</h3><p class="text-center">Score ${score}/${qd.questions.length} (${percent}%) – need 75%.</p><button onclick="openQuiz('${currentQuiz}')" class="mt-4 w-full bg-slate-600 text-white py-2 rounded-lg">Try Again</button>`;
+            }
+        }
+        function toggleRecallMode() {
+            const active = !document.body.classList.contains('recall-mode');
+            const toggle = document.getElementById('recall-toggle'), knob = document.getElementById('recall-knob');
+            if(active) { document.body.classList.add('recall-mode'); toggle.classList.add('bg-gon-dark'); knob.classList.add('translate-x-6'); }
+            else { document.body.classList.remove('recall-mode'); toggle.classList.remove('bg-gon-dark'); knob.classList.remove('translate-x-6'); }
+        }
+        function toggleMobileMenu() { const s=document.getElementById('sidebar'); if(s.classList.contains('hidden')) s.classList.remove('hidden','flex','absolute','h-full','z-50'); else s.classList.add('hidden'); }
+        document.addEventListener('DOMContentLoaded', () => { updateSidebarUI(); document.querySelectorAll('.reveal-text').forEach(el => el.addEventListener('click', function(){ if(document.body.classList.contains('recall-mode')) this.classList.toggle('revealed'); })); });
+    </script>
+</body>
+</html>
